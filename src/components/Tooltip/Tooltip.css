@@ -1,0 +1,28 @@
+.synonym-list {
+    position: fixed;
+    list-style: none;
+    width: 200px;
+    text-align: center;
+    background-color: #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid green;
+    max-height: 500px;
+    overflow-y: auto;
+    -webkit-box-shadow: -2px 4px 26px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px 4px 26px -7px rgba(0,0,0,0.75);
+    box-shadow: -2px 4px 26px -7px rgba(0,0,0,0.75);
+}
+
+.synonym-item {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.synonym-item:hover {
+    background-color: rgba(50,205,50, .5);
+}
