@@ -14,8 +14,9 @@ export const modifySelection = (selectionObject) => {
     const count = textTrash.length
     const { anchorOffset, anchorNode, focusOffset, focusNode } = selectionObject // get new data of selection
     if (selectionFromRight) { // deselect excess elements
-      const newOffset = anchorOffset - count
-      selectionObject.setBaseAndExtent(anchorNode, newOffset, focusNode, focusOffset)
+      const newOffset = anchorOffset > count ? anchorOffset - count : focusNode.length // replce offset if selection were started from another node
+      const newNode = anchorOffset > count ? anchorNode : focusNode // replace node if selection were started from another node
+      selectionObject.setBaseAndExtent(newNode, newOffset, focusNode, focusOffset)
     } else {
       selectionObject.extend(focusNode, focusOffset - 1)
     }
