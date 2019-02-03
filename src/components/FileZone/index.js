@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { modifySelection, cutDownSelection } from '../../utils/selection'
 import './FileZone.css'
 
 class FileZone extends Component {
@@ -8,6 +9,7 @@ class FileZone extends Component {
     setModifiers: PropTypes.func,
     chooseWord: PropTypes.func,
     resetSelected: PropTypes.func,
+    closeModifiers: PropTypes.func,
   }
 
   constructor () {
@@ -18,44 +20,23 @@ class FileZone extends Component {
   async componentDidMount () {
     const { getText } = this.props
     if (getText) {
-      this.textArea.current.innerHTML = await getText()
+      this.textArea.current.innerHTML = await getText() // set default text
     }
   }
+
+  // selectionStarted = false // flag to reduce reselect
 
   onSelect = () => {
     this.props.setModifiers()
     const selection = window.getSelection()
     const selHasSpace = selection.toString().match(/\W/g)
-    // @TODO: make deselect when going back by selected text
-    // if (!selection.isCollapsed && !selection.toString().match(/\s/) && this.isSelected) {
-    //   console.log('owh')
-    // }
     if (!selection.isCollapsed && !selHasSpace) {
-      const { anchorOffset, focusOffset } = selection
-      const selectionFromRight = (anchorOffset - focusOffset) > 0
-      selection.modify('move', selectionFromRight ? 'right' : 'left', 'word')
-      selection.modify('extend', selectionFromRight ? 'left' : 'right', 'word')
-      const textTrash = selection.toString().match(/\W/g)
-      if (textTrash) {
-        const count = textTrash.length
-        const { anchorOffset, anchorNode, focusOffset, focusNode } = selection
-        if (selectionFromRight) {
-          const newOffset = anchorOffset > count ? anchorOffset - count : focusNode.length
-          const newNode = anchorOffset > count ? anchorNode : focusNode
-          selection.setBaseAndExtent(newNode, newOffset, focusNode, focusOffset)
-          const word = window.getSelection().toString()
-          this.props.chooseWord(word)
-        } else {
-          selection.extend(focusNode, focusOffset - 1)
-        }
-      }
-      const word = window.getSelection().toString()
+      modifySelection(selection)
+      const word = selection.toString()
       this.props.chooseWord(word)
     }
     if (!selection.isCollapsed && selHasSpace) {
-      const node = selection.focusNode
-      const offset = selection.focusOffset
-      selection.setPosition(node, offset)
+      cutDownSelection(selection)
     }
     if (selection.isCollapsed) {
       this.props.resetSelected()
@@ -70,6 +51,7 @@ class FileZone extends Component {
           ref={this.textArea}
           contentEditable={true}
           onSelect={this.onSelect}
+          onInput={this.props.closeModifiers}
           onDoubleClick={() => false}
         />
       </div>

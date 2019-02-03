@@ -18,13 +18,19 @@ export default class Tooltip extends Component {
 
   render () {
     const { position: { top, left, width }, wordsList, replaceWord } = this.props
+    const coordinates = { top, left: `${left - 100 + (width / 2)}px` }
     return (
       <Fragment>
         {wordsList.length
-          ? <ul className={'synonym-list'} style={{ top, left: `${left - 100 + (width / 2)}px` }}>
+          ? <ul className={'synonym-list'} style={coordinates}>
             {wordsList.map(buildList(replaceWord))}
           </ul>
-          : <div className={'synonym-list'}>U found word without synonyms :)</div>
+          : <div
+            className={'synonym-list'}
+            style={{ ...coordinates, top: '20px' }}
+          >
+            U found word without synonyms :)
+          </div>
         }
       </Fragment>
     )

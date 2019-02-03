@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-import './App.css'
+import { debounce } from 'lodash/function'
 import ControlPanel from '../components/ControlPanel'
 import FileZone from '../components/FileZone'
-import { getMockText, getSynonyms } from '../utils/text.service'
 import Tooltip from '../components/Tooltip'
+import { getMockText, getSynonyms } from '../utils/text.service'
+import { hasSelection } from '../utils/selection'
+import './App.css'
 
 class App extends Component {
   state = {
-    synonyms: {
+    synonymProps: {
       word: '',
       synonymsList: [],
       positionProps: {},
@@ -35,47 +37,60 @@ class App extends Component {
   }
 
   getWordSynonyms = async (word) => {
-    console.log('selected word: ', word)
     const synonyms = await getSynonyms(word)
     const synonymsList = synonyms.map(({ word }) => word)
     const positionProps = window.getSelection().getRangeAt(0).getBoundingClientRect()
     const range = window.getSelection().getRangeAt(0)
-    this.setState({ synonyms: { word, synonymsList, positionProps, range } })
+    this.setState({ synonymProps: { word, synonymsList, positionProps, range } })
   }
 
   resetWord = () => {
-    this.setState({ synonyms: this.defaultSynonymsState })
+    const { synonymProps: { word } } = this.state
+    if (word) {
+      this.setState({ synonymProps: this.defaultSynonymsState })
+    }
+  }
+
+  closeModifiers = () => {
+    const { modifiers } = this.state
+    Object.keys(modifiers).forEach((key) => {
+      if (modifiers[key]) { // if modifier turned on
+        document.execCommand(key) // turn off
+      }
+    })
   }
 
   replaceWord = (e) => {
-    const { range } = this.state.synonyms
+    const { range } = this.state.synonymProps
     const { endContainer, startContainer } = range
-    if (endContainer !== startContainer) {
-      range.setEnd(startContainer, startContainer.length)
+    if (endContainer !== startContainer) { // to save modifiers if selected via dblClick
+      range.setEnd(startContainer, startContainer.length) // set end of the selection back to modifying tags
     }
     range.deleteContents()
     const newTxt = document.createTextNode(e.target.innerText)
     range.insertNode(newTxt)
-    range.collapse(false)
+    range.collapse(false) // put curson at the and of the word
     window.getSelection().removeAllRanges()
-    window.getSelection().addRange(range)
+    window.getSelection().addRange(range) // return curson to workArea
     this.resetWord()
   }
 
   render () {
-    const { modifiers, synonyms: { word, synonymsList, positionProps } } = this.state
+    const { modifiers, synonymProps: { word, synonymsList, positionProps } } = this.state
+    const isBtnsDisabled = hasSelection()
     return (
       <div className="App">
         <header>
           <span>Simple Text Editor</span>
         </header>
         <main>
-          <ControlPanel {...modifiers}/>
+          <ControlPanel {...modifiers} disabled={isBtnsDisabled}/>
           <FileZone
             getText={getMockText}
             setModifiers={this.getCursorState}
             chooseWord={this.getWordSynonyms}
             resetSelected={this.resetWord}
+            closeModifiers={this.closeModifiers}
           />
           {word && <Tooltip position={positionProps} replaceWord={this.replaceWord} wordsList={synonymsList}/>}
         </main>

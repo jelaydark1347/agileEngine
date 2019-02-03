@@ -9,16 +9,17 @@ class ControlPanel extends Component {
     bold: PropTypes.bool.isRequired,
     italic: PropTypes.bool.isRequired,
     underline: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
   }
 
   render () {
-    const { bold, italic, underline } = this.props
+    const { bold, italic, underline, disabled } = this.props
     return (
       <div id="control-panel">
         <div id="format-actions">
-          <Button type={BOLD} isActive={bold}/>
-          <Button type={ITALIC} isActive={italic}/>
-          <Button type={UNDERLINE} isActive={underline}/>
+          <Button type={BOLD} isActive={bold} disabled={disabled}/>
+          <Button type={ITALIC} isActive={italic} disabled={disabled}/>
+          <Button type={UNDERLINE} isActive={underline} disabled={disabled}/>
         </div>
       </div>
     )
