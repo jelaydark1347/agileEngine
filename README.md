@@ -1,13 +1,14 @@
 
-# Simple text editor
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-## Initial setup
-Run `npm install` in order to setup application
-
-## Development server
-Run `npm start` for a dev server.
-
+# Simple text editor  
+![Simple Text Editor](https://i.ibb.co/mzmztSY/te.png)
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).  
+  
+## Initial setup  
+Run `npm install` in order to setup application  
+  
+## Development server  
+Run `npm start` for a dev server.  
+  
 ## Usage
 
  - You can select words using mouse, rather than using combination Shift + Arrows
