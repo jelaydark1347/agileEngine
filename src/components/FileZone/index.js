@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './FileZone.css'
 
-const falseFunc = () => false
-
 class FileZone extends Component {
   static propTypes = {
     getText: PropTypes.func,
     setModifiers: PropTypes.func,
     chooseWord: PropTypes.func,
+    resetSelected: PropTypes.func,
   }
 
   constructor () {
@@ -27,6 +26,7 @@ class FileZone extends Component {
     this.props.setModifiers()
     const selection = window.getSelection()
     const selHasSpace = selection.toString().match(/\W/g)
+    // @TODO: make deselect when going back by selected text
     // if (!selection.isCollapsed && !selection.toString().match(/\s/) && this.isSelected) {
     //   console.log('owh')
     // }
@@ -40,18 +40,23 @@ class FileZone extends Component {
         const count = textTrash.length
         const { anchorOffset, anchorNode, focusOffset, focusNode } = selection
         if (selectionFromRight) {
-          selection.setBaseAndExtent(anchorNode, anchorOffset - count, focusNode, focusOffset)
+          const newOffset = anchorOffset > count ? anchorOffset - count : focusNode.length
+          const newNode = anchorOffset > count ? anchorNode : focusNode
+          selection.setBaseAndExtent(newNode, newOffset, focusNode, focusOffset)
+          const word = window.getSelection().toString()
+          this.props.chooseWord(word)
         } else {
           selection.extend(focusNode, focusOffset - 1)
         }
-        const word = selection.toString()
-        this.props.chooseWord(word)
       }
+      const word = window.getSelection().toString()
+      this.props.chooseWord(word)
     }
     if (!selection.isCollapsed && selHasSpace) {
       const node = selection.focusNode
       const offset = selection.focusOffset
       selection.setPosition(node, offset)
+      this.props.resetSelected()
     }
   }
 
@@ -63,6 +68,7 @@ class FileZone extends Component {
           ref={this.textArea}
           contentEditable={true}
           onSelect={this.onSelect}
+          onDoubleClick={() => false}
         />
       </div>
     )

@@ -52,11 +52,14 @@ class App extends Component {
     range.deleteContents()
     const newTxt = document.createTextNode(e.target.innerText)
     range.insertNode(newTxt)
+    range.collapse(false)
+    window.getSelection().removeAllRanges()
+    window.getSelection().addRange(range)
     this.resetWord()
   }
 
   render () {
-    const { modifiers, synonyms: { word, synonymsList, positionProps, range } } = this.state
+    const { modifiers, synonyms: { word, synonymsList, positionProps } } = this.state
     return (
       <div className="App">
         <header>
@@ -68,6 +71,7 @@ class App extends Component {
             getText={getMockText}
             setModifiers={this.getCursorState}
             chooseWord={this.getWordSynonyms}
+            resetSelected={this.resetWord}
           />
           {word && <Tooltip position={positionProps} replaceWord={this.replaceWord} wordsList={synonymsList}/>}
         </main>
