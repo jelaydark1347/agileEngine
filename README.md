@@ -1,6 +1,7 @@
 
 # Simple text editor  
 ![Simple Text Editor](https://i.ibb.co/mzmztSY/te.png)
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).  
   
 ## Initial setup  
