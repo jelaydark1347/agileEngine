@@ -2,15 +2,9 @@ import React, { Component } from 'react'
 import './App.css'
 import ControlPanel from '../components/ControlPanel'
 import FileZone from '../components/FileZone'
-import getMockText from '../utils/text.service'
+import { getMockText } from '../utils/text.service'
 
 class App extends Component {
-  getText () {
-    getMockText().then(function (result) {
-      console.log(result)
-    })
-  }
-
   render () {
     return (
       <div className="App">
@@ -19,7 +13,7 @@ class App extends Component {
         </header>
         <main>
           <ControlPanel/>
-          <FileZone/>
+          <FileZone getText={getMockText}/>
         </main>
       </div>
     )
