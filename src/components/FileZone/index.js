@@ -41,6 +41,12 @@ class FileZone extends Component {
     }
   }
 
+  onInput = (e) => {
+    if (e.key === 'Enter' || e.key.match(/\W/)) {
+      this.props.closeModifiers()
+    }
+  }
+
   render () {
     return (
       <div id="file-zone">
@@ -49,8 +55,7 @@ class FileZone extends Component {
           ref={this.textArea}
           contentEditable={true}
           onSelect={this.onSelect}
-          onInput={this.props.closeModifiers}
-          onDoubleClick={() => false}
+          onKeyPress={this.onInput}
         />
       </div>
     )

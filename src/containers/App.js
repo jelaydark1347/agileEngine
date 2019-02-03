@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { debounce } from 'lodash/function'
 import ControlPanel from '../components/ControlPanel'
 import FileZone from '../components/FileZone'
 import Tooltip from '../components/Tooltip'
