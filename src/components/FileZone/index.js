@@ -24,8 +24,6 @@ class FileZone extends Component {
     }
   }
 
-  // selectionStarted = false // flag to reduce reselect
-
   onSelect = () => {
     this.props.setModifiers()
     const selection = window.getSelection()
