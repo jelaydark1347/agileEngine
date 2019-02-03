@@ -49,6 +49,10 @@ class App extends Component {
 
   replaceWord = (e) => {
     const { range } = this.state.synonyms
+    const { endContainer, startContainer } = range
+    if (endContainer !== startContainer) {
+      range.setEnd(startContainer, startContainer.length)
+    }
     range.deleteContents()
     const newTxt = document.createTextNode(e.target.innerText)
     range.insertNode(newTxt)

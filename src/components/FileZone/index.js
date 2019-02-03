@@ -56,6 +56,8 @@ class FileZone extends Component {
       const node = selection.focusNode
       const offset = selection.focusOffset
       selection.setPosition(node, offset)
+    }
+    if (selection.isCollapsed) {
       this.props.resetSelected()
     }
   }
