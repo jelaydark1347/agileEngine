@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import './Tooltip.css'
 
@@ -19,11 +19,14 @@ export default class Tooltip extends Component {
   render () {
     const { position: { top, left, width }, wordsList, replaceWord } = this.props
     return (
-      <ul className={'synonym-list'} style={{ top, left: `${left - 100 + (width / 2)}px`, position: 'fixed', width: '200px', border: '1px solid black', listStyle: 'none', padding: 0 }}>
-        {
-          wordsList.map(buildList(replaceWord))
+      <Fragment>
+        {wordsList.length
+          ? <ul className={'synonym-list'} style={{ top, left: `${left - 100 + (width / 2)}px` }}>
+            {wordsList.map(buildList(replaceWord))}
+          </ul>
+          : <div className={'synonym-list'}>U found word without synonyms :)</div>
         }
-      </ul>
+      </Fragment>
     )
   }
 }
