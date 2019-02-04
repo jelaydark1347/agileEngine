@@ -9,4 +9,5 @@ export const getSynonyms = async (word = 'duck') => {
     .catch((error) => {
       console.error('Error:', error)
     })
+    .then((data) => data.map(({ word }) => word))
 }
