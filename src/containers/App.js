@@ -1,27 +1,28 @@
 import React, { Component } from 'react'
+import modifiers from '../utils/modifiers'
 import { getMockText, getSynonyms } from '../utils/text.service'
-import './App.css'
 import Editor from '../components/Editor'
 import { BOLD, ITALIC, UNDERLINE } from '../constants/buttons'
+import './App.css'
 
 const defaultModifiers = [
   {
     type: BOLD,
     sign: 'B',
     btnStyle: { fontWeight: 'bold' },
-    method: () => document.execCommand('bold'),
+    method: modifiers[BOLD],
   },
   {
     type: ITALIC,
     sign: 'I',
     btnStyle: { fontStyle: 'italic' },
-    method: () => document.execCommand('italic'),
+    method: modifiers[ITALIC],
   },
   {
     type: UNDERLINE,
     sign: 'U',
     btnStyle: { textDecoration: 'underline' },
-    method: () => document.execCommand('underline'),
+    method: modifiers[UNDERLINE],
   },
 ]
 
